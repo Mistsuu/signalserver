@@ -5,7 +5,7 @@ const api = apisauce.create({
     Accept: "application/json",
     // "Content-Type": "application/x-www-form-urlencoded"
   },
-  timeout: 30000,
+  timeout: 1000,
   baseURL: "http://localhost:1208",
 })
 
