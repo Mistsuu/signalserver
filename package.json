@@ -1,8 +1,18 @@
 {
   "name": "signalserver",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "node app/index.js"
+  },
+  "_moduleDirectories": ["app"],
   "repository": "git@github.com:Mistsuu/signalserver.git",
   "author": "Mistsu <vietanhtran12@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "module-alias": "^2.2.2"
+  }
 }
