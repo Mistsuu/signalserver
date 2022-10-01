@@ -1,5 +1,5 @@
-const loginMiddleware = require("./login.middleware")
+const LoginMiddleware = require("./login.middleware")
 
 module.exports = {
-  loginMiddleware
+  LoginMiddleware
 }
