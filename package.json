@@ -1,0 +1,8 @@
+{
+  "name": "signalserver",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Mistsuu/signalserver.git",
+  "author": "Mistsu <vietanhtran12@gmail.com>",
+  "license": "MIT"
+}
