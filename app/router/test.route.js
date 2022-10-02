@@ -1,5 +1,8 @@
-const test = (req, res) => {
-  res.status(200).json({status: 200, elements: 'Hello Anh Em'});
+const TestRoute = (req, res) => {
+  res.status(200).json({
+    status: 200, 
+    elements: 'Hello Anh Em'
+  });
 }
 
-module.exports = test;
+module.exports = TestRoute;
