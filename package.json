@@ -5,12 +5,15 @@
   "scripts": {
     "start": "node app/index.js"
   },
-  "_moduleDirectories": ["app"],
+  "_moduleDirectories": [
+    "app"
+  ],
   "repository": "git@github.com:Mistsuu/signalserver.git",
   "author": "Mistsu <vietanhtran12@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "module-alias": "^2.2.2"
