@@ -27,8 +27,8 @@ const init = () => {
 
 const registerLinks = () => {
   // -------------- Where we customize our links -------------------
-  app.get(ApiConstant.TEST, Router.TestRoute);
-  app.post(ApiConstant.TEST, Router.TestRoute);
+  app.get(ApiConstant.ROUTE_TEST, Router.TestRoute);
+  app.post(ApiConstant.ROUTE_TEST, Router.TestRoute);
 }
 
 const start = () => {

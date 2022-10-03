@@ -1,6 +1,4 @@
 const TestRoute = (req, res) => {
-  console.log("is requesting...");
-
   res.status(200).json({
     status: 200, 
     elements: [
