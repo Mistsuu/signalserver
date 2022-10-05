@@ -5,6 +5,9 @@ const login = async (userID, password) => {
   const record = await AuthModel.findOne({
     userID: userID
   });
+
+  if (record === null)
+    return false;
   return bcrypt.compare(password, record.password);
 };
 
