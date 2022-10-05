@@ -1,3 +1,5 @@
-module.exports = {
-  
+const RegisterRoute = (req, res) => {
+
 }
+
+module.exports = RegisterRoute;

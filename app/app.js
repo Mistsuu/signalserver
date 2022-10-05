@@ -2,15 +2,15 @@ const express = require('express');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const cors = require('cors');
-
+const mongoose = require('mongoose');
+const Router = require("router");
 const {
   AppConstant,
-  ApiConstant,
+  DbConstant,
 } = require("consts");
 
-const Router = require("router");
-
 var app = express();
+
 const init = () => {
   // -------------- Where we customize our initialization -------------------
   app.use(express.urlencoded({extended: true}));
@@ -25,23 +25,36 @@ const init = () => {
   }));
 }
 
+const connectToDatabase = () => {
+  mongoose.connection
+    .on('error', () => {console.log("Connection to database failed!")})
+    .on('disconnected', () => connectToDatabase)
+    .once('open', () => {console.log("Connected to MongoDB!")});
+  return mongoose.connect(
+            DbConstant.DB_URL, 
+            { 
+              keepAlive: true, 
+              useNewUrlParser: true 
+            });
+}
+
 const registerLinks = () => {
   // -------------- Where we customize our links -------------------
-  app.get(ApiConstant.ROUTE_TEST, Router.TestRoute);
-  app.post(ApiConstant.ROUTE_TEST, Router.TestRoute);
+  app.get("/test", Router.TestRoute);
+  app.post("/test", Router.TestRoute);
+  app.post("/login", Router.LoginRoute);
+  app.post("/register", Router.RegisterRoute);
 }
 
 const start = () => {
-  // -------------- Where we customize our start -------------------
-  app.listen(AppConstant.PORT, () => {console.log(`Listening at port ${AppConstant.PORT}...`);})
+  app.listen(process.env.PORT || AppConstant.PORT, () => {console.log(`Listening at port ${AppConstant.PORT}...`);})
 }
 
 const run = () => {
   init();
+  connectToDatabase();
   registerLinks();
   start();
 }
 
-module.exports = {
-  run
-}
+module.exports = run;

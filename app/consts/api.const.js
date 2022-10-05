@@ -1,8 +1,3 @@
-// Routes
-const ROUTE_LOGIN = "/login";
-const ROUTE_REGISTER = "/register";
-const ROUTE_TEST = "/test";
-
 // HTTP status
 const STT_OK = 200;
 const STT_BAD_REQUEST = 400;
@@ -18,10 +13,6 @@ const METHOD_POST = "POST";
 const METHOD_PUT = "PUT";
 
 module.exports = {
-  // Routes
-  ROUTE_LOGIN,
-  ROUTE_REGISTER,
-  ROUTE_TEST,
   // HTTP status
   STT_OK,
   STT_BAD_REQUEST,

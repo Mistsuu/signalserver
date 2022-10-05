@@ -1,3 +1,5 @@
-module.exports = {
-  
+const LoginRoute = (req, res) => {
+
 }
+
+module.exports = LoginRoute;
