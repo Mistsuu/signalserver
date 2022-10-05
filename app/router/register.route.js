@@ -1,5 +1,6 @@
 const { object, string, boolean } = require("yup");
 const StringFormat = require("string-format");
+const { AuthController } = require("controllers");
 const { 
   TxtConstant, 
   ApiConstant,
@@ -27,11 +28,26 @@ module.exports = (req, res) => {
   // Validate data
   requestSchema.validate(req.body)
     .then(data => {
-      res.status(ApiConstant.STT_OK).json(
-        responseSchema.cast({
-          success: true,
+      // Validate userID, password here.
+      AuthController.register(data.userID, data.password)
+        .then(registerOK => {
+          if (registerOK == true) {
+            res.status(ApiConstant.STT_OK).json(
+              responseSchema.cast({
+                success: true,
+              })
+            );
+          }
+          else {
+            res.status(ApiConstant.STT_OK).json(
+              responseSchema.cast({
+                success: false,
+                error: StringFormat(TxtConstant.FM_USER_ALREADY_DEFINED, data.userID),
+              })
+            );
+          }
+          
         })
-      );
     })
     .catch(err => {
       res.status(ApiConstant.STT_OK).json(
