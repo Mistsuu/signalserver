@@ -1,4 +1,4 @@
-const TestRoute = (req, res) => {
+module.exports = (req, res) => {
   res.status(200).json({
     status: 200, 
     elements: [
@@ -7,6 +7,4 @@ const TestRoute = (req, res) => {
     ],
     method: req.method,
   });
-}
-
-module.exports = TestRoute;
+};
