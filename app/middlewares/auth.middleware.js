@@ -1,5 +1,6 @@
 const { AuthController } = require("controllers");
 const { ApiConstant, AppConstant } = require("consts");
+const { object, string } = require("yup");
 const jwt = require("jsonwebtoken");
 
 const verifyTokenExists = (req, res, next) => {
@@ -20,28 +21,39 @@ const verifyToken = (req, res, next) => {
       res.status(ApiConstant.STT_FORBIDDEN).end();
     } else {
       req.authData = authData;
-      if (authData.hasOwnProperty("userID") && authData.hasOwnProperty("deviceID")) {
-        next();
-      } else {
-        res.status(ApiConstant.STT_FORBIDDEN).end();
-      }
+      next();
     }
   })
+}
+
+const verifyAuthDataContent = (req, res, next) => {
+  let JWTDataSchema = object({
+    userID: string().required(),
+    deviceID: string().required(),
+  });
+
+  JWTDataSchema.validate(req.authData)
+    .then(data => {
+      next();
+    })
+    .catch(err => {
+      res.status(ApiConstant.STT_FORBIDDEN).end();
+    });
 }
 
 const verifyUser = (req, res, next) => {
   AuthController.isUserExists(req.authData.userID)
     .then(answer => {
-          if (answer === true) {
-            next();
-          } else {
-            res.status(ApiConstant.STT_FORBIDDEN).end();
-          }
-          })
+      if (answer === true) {
+        next();
+      } else {
+        res.status(ApiConstant.STT_FORBIDDEN).end();
+      }
+    })
     .catch(err => {
-            res.status(ApiConstant.STT_FORBIDDEN).end();
-          });
+      res.status(ApiConstant.STT_FORBIDDEN).end();
+    });
 }
 
-const AuthMiddleware = [ verifyTokenExists, verifyToken, verifyUser ];
+const AuthMiddleware = [ verifyTokenExists, verifyToken, verifyAuthDataContent, verifyUser ];
 module.exports = AuthMiddleware;
