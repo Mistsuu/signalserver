@@ -4,6 +4,7 @@ const sessions = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const Router = require("router");
+const Middleware = require("middlewares");
 const {
   AppConstant,
   DbConstant,
@@ -42,6 +43,7 @@ const registerLinks = () => {
   // -------------- Where we customize our links -------------------
   app.get("/test", Router.TestRoute);
   app.post("/test", Router.TestRoute);
+  app.post("/test-auth", Middleware.AuthMiddleware, Router.TestRoute);
   app.post("/login", Router.LoginRoute);
   app.post("/register", Router.RegisterRoute);
 }

@@ -1,8 +1,10 @@
 const { object, string, boolean } = require("yup");
 const StringFormat = require("string-format");
+const jwt = require("jsonwebtoken");
 const { AuthController } = require("controllers");
 const { 
   TxtConstant, 
+  AppConstant,
   ApiConstant,
   ConfigConstant,
 } = require("consts");
@@ -22,9 +24,15 @@ module.exports = (req, res) => {
                 .max(ConfigConstant.PASSWORD_MAXLEN, StringFormat(TxtConstant.FM_PASSWORD_LEN_ERR, ConfigConstant.PASSWORD_MINLEN, ConfigConstant.PASSWORD_MAXLEN)),
   });
 
+  let JWTDataSchema = object({
+    userID: string().required(),
+    deviceID: string().required(),
+  })
+
   let responseSchema = object({
     success: boolean().required(),
     error: string().default(""),
+    token: string().default(""),
   })
 
   // Validate data
@@ -34,11 +42,31 @@ module.exports = (req, res) => {
       AuthController.login(data.userID, data.password)
         .then(loginOK => {
           if (loginOK == true) {
-            res.status(ApiConstant.STT_OK).json(
-              responseSchema.cast({
-                success: true,
-              })
-            );
+            // Set JWT signature
+            jwt.sign(
+              JWTDataSchema.cast({
+                userID: data.userID,
+                deviceID: data.deviceID,
+              }),
+              AppConstant.SECRET_TOKEN,
+              (err, token) => {
+                if (!err) {
+                  res.status(ApiConstant.STT_OK).json(
+                    responseSchema.cast({
+                      success: true,
+                      token: token,
+                    })
+                  );
+                } else {
+                  res.status(ApiConstant.STT_OK).json(
+                    responseSchema.cast({
+                      success: false,
+                      error: TxtConstant.TXT_CANNOT_CREATE_SESSION,
+                    })
+                  );
+                }
+              }
+            )
           }
           else {
             res.status(ApiConstant.STT_OK).json(

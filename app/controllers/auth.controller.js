@@ -29,7 +29,14 @@ const register = async (userID, password) => {
   return true;
 };
 
+const isUserExists = async (userID) => {
+  return await AuthModel.findOne({
+    userID: userID
+  }) !== null;
+}
+
 module.exports = {
   login, 
   register,
+  isUserExists,
 }

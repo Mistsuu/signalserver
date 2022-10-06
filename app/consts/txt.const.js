@@ -1,6 +1,7 @@
 // Texts
 const TXT_INVALID_REQUEST_FORMAT = "Invalid request format!";
 const TXT_USERNAME_OR_PASSWORD_IS_WRONG = "Username or password is wrong!";
+const TXT_CANNOT_CREATE_SESSION = "Cannot create session for user!";
 
 // Formats
 const FM_USERNAME_LEN_ERR = "username must be >= {0} and <= {1} in length.";
