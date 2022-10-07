@@ -1,4 +1,16 @@
+const { TestController } = require("controllers");
+
 module.exports = (req, res) => {
+  // TestController.testModel()
+  //   .then(data => {
+  //     console.log("success!");
+  //     console.log(data);
+  //   })
+  //   .catch(err => {
+  //     console.log("damn, no!");
+  //     console.log(err);
+  //   })
+
   if (req.hasOwnProperty("authData")) {
     res.status(200).json({
       status: 200, 
