@@ -1,6 +1,7 @@
 const { object, string, boolean } = require("yup");
 const StringFormat = require("string-format");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const { AuthController } = require("controllers");
 const { 
   TxtConstant, 
@@ -16,8 +17,6 @@ module.exports = (req, res) => {
               .required()
               .min(ConfigConstant.USERNAME_MINLEN, StringFormat(TxtConstant.FM_USERNAME_LEN_ERR, ConfigConstant.USERNAME_MINLEN, ConfigConstant.USERNAME_MAXLEN))
               .max(ConfigConstant.USERNAME_MAXLEN, StringFormat(TxtConstant.FM_USERNAME_LEN_ERR, ConfigConstant.USERNAME_MINLEN, ConfigConstant.USERNAME_MAXLEN)),
-    deviceID: string()
-                .required(),
     password: string()
                 .required()
                 .min(ConfigConstant.PASSWORD_MINLEN, StringFormat(TxtConstant.FM_PASSWORD_LEN_ERR, ConfigConstant.PASSWORD_MINLEN, ConfigConstant.PASSWORD_MAXLEN))
@@ -33,6 +32,7 @@ module.exports = (req, res) => {
     success: boolean().required(),
     error: string().default(""),
     token: string().default(""),
+    deviceID: string().default(""),
   })
 
   // Validate data
@@ -42,11 +42,14 @@ module.exports = (req, res) => {
       AuthController.login(data.userID, data.password)
         .then(loginOK => {
           if (loginOK == true) {
+            // Generate a device ID
+            const deviceID = crypto.randomBytes(16).toString('hex');
+
             // Set JWT signature
             jwt.sign(
               JWTDataSchema.cast({
                 userID: data.userID,
-                deviceID: data.deviceID,
+                deviceID: deviceID,
               }),
               AppConstant.SECRET_TOKEN,
               (err, token) => {
@@ -55,6 +58,7 @@ module.exports = (req, res) => {
                     responseSchema.cast({
                       success: true,
                       token: token,
+                      deviceID: deviceID,
                     })
                   );
                 } else {
