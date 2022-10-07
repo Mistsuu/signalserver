@@ -56,9 +56,10 @@ module.exports = (req, res) => {
                 if (!err) {
                   res.status(ApiConstant.STT_OK).json(
                     responseSchema.cast({
-                      success: true,
                       token: token,
+                      userID: data.userID,
                       deviceID: deviceID,
+                      success: true,
                     })
                   );
                 } else {
