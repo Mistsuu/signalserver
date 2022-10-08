@@ -5,13 +5,10 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   userID: String,
   deviceID: String,
+  identityKey: String,
   signedPrekey: String,
   signature: String,
-  oneTimePrekeys: [
-    new mongoose.Schema({
-      key: String,
-    })
-  ],
+  oneTimePrekeys: [String],
   messages: [
     new mongoose.Schema({
       message: String,
