@@ -33,6 +33,7 @@ module.exports = (req, res) => {
     error: string().default(""),
     token: string().default(""),
     deviceID: string().default(""),
+    userID: string().default(""),
   })
 
   // Validate data

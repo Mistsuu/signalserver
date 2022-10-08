@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
   signature: String,
   oneTimePrekeys: [
     new mongoose.Schema({
-      keyID: String,
       key: String,
     })
   ],
