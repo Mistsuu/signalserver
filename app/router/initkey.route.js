@@ -18,7 +18,6 @@ module.exports = (req, res) => {
   });
 
   let responseSchema = object({
-    success: boolean().required(),
     error: string().default(""),
   })
 
@@ -30,13 +29,11 @@ module.exports = (req, res) => {
           if (initKeyOK) {
             res.status(ApiConstant.STT_OK).json(
               responseSchema.cast({
-                success: true,
               })
             );
           } else {
-            res.status(ApiConstant.STT_OK).json(
+            res.status(ApiConstant.STT_NOT_ACCEPTABLE).json(
               responseSchema.cast({
-                success: false,
                 error: TxtConstant.TXT_CANNOT_INITIALIZE_KEY_FOR_CLIENT,
               })
             );
@@ -44,9 +41,8 @@ module.exports = (req, res) => {
         })
     })
     .catch(err => {
-      res.status(ApiConstant.STT_OK).json(
+      res.status(ApiConstant.STT_BAD_REQUEST).json(
         responseSchema.cast({
-          success: false,
           error: err.errors[0],
         })
       );

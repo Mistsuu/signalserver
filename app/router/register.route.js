@@ -21,7 +21,6 @@ module.exports = (req, res) => {
   });
 
   let responseSchema = object({
-    success: boolean().required(),
     error: string().default(""),
   });
 
@@ -34,14 +33,12 @@ module.exports = (req, res) => {
           if (registerOK == true) {
             res.status(ApiConstant.STT_OK).json(
               responseSchema.cast({
-                success: true,
               })
             );
           }
           else {
-            res.status(ApiConstant.STT_OK).json(
+            res.status(ApiConstant.STT_BAD_REQUEST).json(
               responseSchema.cast({
-                success: false,
                 error: StringFormat(TxtConstant.FM_USER_ALREADY_DEFINED, data.userID),
               })
             );
@@ -50,9 +47,8 @@ module.exports = (req, res) => {
         })
     })
     .catch(err => {
-      res.status(ApiConstant.STT_OK).json(
+      res.status(ApiConstant.STT_BAD_REQUEST).json(
         responseSchema.cast({
-          success: false,
           error: err.errors[0],
         })
       );

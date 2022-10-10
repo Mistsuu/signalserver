@@ -29,7 +29,6 @@ module.exports = (req, res) => {
   })
 
   let responseSchema = object({
-    success: boolean().required(),
     error: string().default(""),
     token: string().default(""),
     deviceID: string().default(""),
@@ -60,13 +59,11 @@ module.exports = (req, res) => {
                       token: token,
                       userID: data.userID,
                       deviceID: deviceID,
-                      success: true,
                     })
                   );
                 } else {
-                  res.status(ApiConstant.STT_OK).json(
+                  res.status(ApiConstant.STT_NOT_ACCEPTABLE).json(
                     responseSchema.cast({
-                      success: false,
                       error: TxtConstant.TXT_CANNOT_CREATE_SESSION,
                     })
                   );
@@ -75,9 +72,8 @@ module.exports = (req, res) => {
             )
           }
           else {
-            res.status(ApiConstant.STT_OK).json(
+            res.status(ApiConstant.STT_BAD_REQUEST).json(
               responseSchema.cast({
-                success: false,
                 error: TxtConstant.TXT_USERNAME_OR_PASSWORD_IS_WRONG,
               })
             );
@@ -86,9 +82,8 @@ module.exports = (req, res) => {
         })
     })
     .catch(err => {
-      res.status(ApiConstant.STT_OK).json(
+      res.status(ApiConstant.STT_BAD_REQUEST).json(
         responseSchema.cast({
-          success: false,
           error: err.errors[0],
         })
       );

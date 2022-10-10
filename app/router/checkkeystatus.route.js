@@ -4,14 +4,14 @@ const { ApiConstant } = require("consts");
 
 module.exports = (req, res) => {
   let responseSchema = object({
-    success: boolean().required(),
+    isKeyExists: boolean().required(),
   })
 
   UserController.checkIfKeyExists(req.authData.userID, req.authData.deviceID)
     .then(isKeyExists => {
       res.status(ApiConstant.STT_OK).json(
         responseSchema.cast({
-          success: isKeyExists,
+          isKeyExists: isKeyExists,
         })
       );
     });
