@@ -49,6 +49,22 @@ const registerKeys = async (userID, deviceID, preKeyBundle) => {
   }
 }
 
+const checkIfKeyExists = async (userID, deviceID) => {
+  try 
+  {
+    const record = await UserModel.findOne({
+      userID: userID,
+      deviceID: deviceID,
+    });
+    return record !== null;
+  } 
+  catch 
+  {
+    return false;
+  }
+} 
+
 module.exports = {
-  registerKeys
+  registerKeys,
+  checkIfKeyExists,
 }

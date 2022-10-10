@@ -47,6 +47,7 @@ const registerLinks = () => {
   app.post("/login", Router.LoginRoute);
   app.post("/register", Router.RegisterRoute);
   app.post("/initkey", Middleware.AuthMiddleware, Router.InitKeyRoute);
+  app.get("/checkKeyStatus", Middleware.AuthMiddleware, Router.CheckKeyStatusRoute);
 }
 
 const start = () => {
