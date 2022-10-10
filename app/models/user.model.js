@@ -12,8 +12,13 @@ const userSchema = new mongoose.Schema({
   usedOneTimeKeys: [String],
   messages: [
     new mongoose.Schema({
-      message: String,
+      type: Number,
       header: String,
+      message: String,
+      messageID: String,
+      timestamp: Number,
+      sendUserID: String,
+      sendDeviceID: String,
     })
   ]
 });

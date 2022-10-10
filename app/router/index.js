@@ -4,6 +4,7 @@ const TestRoute = require("./test.route");
 const SendRoute = require("./send.route");
 const InitKeyRoute = require("./initkey.route");
 const CheckKeyStatusRoute = require("./checkkeystatus.route");
+const GetKeyRoute = require("./getkey.route");
 
 module.exports = {
   LoginRoute,
@@ -11,5 +12,6 @@ module.exports = {
   TestRoute,
   SendRoute,
   InitKeyRoute,
+  GetKeyRoute,
   CheckKeyStatusRoute,
 }

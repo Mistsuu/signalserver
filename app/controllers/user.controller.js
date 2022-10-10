@@ -64,7 +64,52 @@ const checkIfKeyExists = async (userID, deviceID) => {
   }
 } 
 
+const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, messageObjs) => {
+  var oldDeviceIDs = [];
+  var newDeviceIDs = [];
+
+  // Send to already corrected receipients.
+  for (var messageObj of messageObjs) {
+    if (!await checkIfDeviceExists(receipientUserID, messageObj.receipientDeviceID)) {
+      oldDeviceIDs.append(deviceID);
+    } else {
+      UserModel.findOneAndUpdate({
+        userID: receipientUserID,
+        deviceID: messageObj.receipientDeviceID,
+      }, {
+        $push: {
+          messages: {
+            type: messageObj.type,
+            header: messageObj.header,
+            message: messageObj.message,
+            messageID: messageObj.messageID,
+            timestamp: messageObj.timestamp,
+            sendUserID: sendUserID,
+            sendDeviceID: sendDeviceID,
+          }
+        }
+      })
+    }
+  }
+
+  // Fetch missing users from request
+  const userRecords = await UserModel.find({
+    userID: receipientUserID
+  });
+
+  const sentDeviceIDs = messageObjs.map(messageObj => messageObj.receipientDeviceID);
+  newDeviceIDs = userRecords
+                  .map   (record => record.deviceID)
+                  .filter(record => !sentDeviceIDs.includes(record.deviceID));
+
+  return [oldDeviceIDs, newDeviceIDs];
+}
+
+const checkIfDeviceExists = checkIfKeyExists;
+
 module.exports = {
   registerKeys,
   checkIfKeyExists,
+  checkIfDeviceExists,
+  putMessagesToMailbox,
 }
