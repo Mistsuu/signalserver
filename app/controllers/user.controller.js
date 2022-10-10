@@ -1,4 +1,5 @@
 const { UserModel } = require("models");
+const { getRandomInt } = require("utils/buffer.util");
 
 const registerKeys = async (userID, deviceID, preKeyBundle) => {
   try 
@@ -107,8 +108,44 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
 
 const checkIfDeviceExists = checkIfKeyExists;
 
+const fetchPrekeyBundle = async (userID, deviceID) => {
+  const record = await UserModel.findOne({
+    userID: userID,
+    deviceID: deviceID,
+  });
+
+  if (record === null)
+    return {
+      found: false
+    };
+
+
+  // Fetch random one-time key and move it to the usedOneTimeKeys.
+  var randIndex = record.oneTimePrekeys.length !== 0 ? getRandomInt(record.oneTimePrekeys.length) : null;
+  var oneTimePrekey = randIndex !== null ? record.oneTimePrekeys[randIndex] : null; 
+  if (oneTimePrekey !== null) {
+    record.oneTimePrekeys.splice(randIndex, 1);
+    await UserModel.updateOne( { _id: record.id }, { 
+      $set: { oneTimePrekeys: record.oneTimePrekeys },
+    });
+    await UserModel.updateOne( { _id: record.id }, { 
+      $push: { usedOneTimeKeys: oneTimePrekey }
+    });
+  }
+
+  // Return keys
+  return {
+    found: true,
+    identityKey: record.identityKey,
+    signedPrekey: record.signedPrekey,
+    signature: record.signature,
+    oneTimePrekey: oneTimePrekey,
+  }
+}
+
 module.exports = {
   registerKeys,
+  fetchPrekeyBundle,
   checkIfKeyExists,
   checkIfDeviceExists,
   putMessagesToMailbox,

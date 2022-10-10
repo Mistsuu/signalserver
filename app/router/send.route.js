@@ -37,7 +37,7 @@ module.exports = (req, res) => {
       const sendUserID = req.authData.userID;
       const sendDeviceID = req.authData.deviceID;
       const receipientUserID = req.params.userID;
-      console.log(`${sendUserID}.${sendDeviceID} --> ${receipientUserID}`)
+      // console.log(`${sendUserID}.${sendDeviceID} --> ${receipientUserID}`)
   
       requestSchema.validate(req.body)
         .then(messages => {

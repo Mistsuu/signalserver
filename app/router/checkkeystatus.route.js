@@ -14,5 +14,5 @@ module.exports = (req, res) => {
           isKeyExists: isKeyExists,
         })
       );
-    });
+    })
 }

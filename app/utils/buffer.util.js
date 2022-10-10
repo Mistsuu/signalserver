@@ -12,8 +12,12 @@ const randomBufHex = (nbytes) => {
   return buffer2Hex(randomBytes(nbytes));
 }
 
+const getRandomInt = (max) =>
+  Math.floor(Math.random() * max) % max;
+
 module.exports = {
   buffer2Hex,
   hex2Buffer,
   randomBufHex,
+  getRandomInt,
 }
