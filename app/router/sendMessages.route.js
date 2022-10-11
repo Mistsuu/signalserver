@@ -34,7 +34,7 @@ module.exports = (req, res) => {
           error: TxtConstant.TXT_NO_USER_ID_FOUND_FOR_RECEIPIENT
         }))
     } 
-    else if (req.params.hasOwnProperty("userID") !== req.params.hasOwnProperty("targetUserID") || req.params.hasOwnProperty("userID") !== req.authData.userID) {
+    else if (req.params.userID !== req.params.targetUserID && req.params.userID !== req.authData.userID) {
       res.status(ApiConstant.STT_BAD_REQUEST)
         .json(responseSchema.cast({
           error: TxtConstant.TXT_THIS_PATH_ONLY_SEND_TO_YOU_OR_THE_RECEIPIENT
