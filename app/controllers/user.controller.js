@@ -160,11 +160,38 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
 // =================================================================================
 
 const fetchMessagesFromMailbox = async (userID, deviceID) => {
+  try {
+    const record = await UserModel.findOneAndUpdate({
+      userID: userID,
+      deviceID: deviceID
+    }, {
+      $set: { messages: [] }
+    });
 
+    await UserModel.findByIdAndUpdate(record.id, {
+      $set: { pendingMessages: record.messages.concat(record.pendingMessages) }
+    });
+
+    return record.messages.concat(record.pendingMessages)
+  }
+  catch {
+    return null;
+  }
 }
 
 const clearPendingMessages = async (userID, deviceID) => {
-
+  try {
+    await UserModel.findOneAndUpdate({
+      userID: userID,
+      deviceID: deviceID
+    }, {
+      $set: { pendingMessages: [] }
+    });
+    return true;
+  }
+  catch {
+    return false;
+  }
 }
 
 module.exports = {
@@ -172,6 +199,7 @@ module.exports = {
   fetchPrekeyBundle,
   checkIfKeyExists,
   checkIfDeviceExists,
+  
   putMessagesToMailbox,
   fetchMessagesFromMailbox,
   clearPendingMessages,
