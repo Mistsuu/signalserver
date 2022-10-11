@@ -100,8 +100,9 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
 
   const sentDeviceIDs = messageObjs.map(messageObj => messageObj.receipientDeviceID);
   newDeviceIDs = userRecords
-                  .map   (record => record.deviceID)
-                  .filter(record => !sentDeviceIDs.includes(record.deviceID));
+                  .map   (record   => record.deviceID)
+                  .filter(deviceID => !sentDeviceIDs.includes(deviceID))
+                  .filter(deviceID => !(sendUserID === receipientUserID && sendDeviceID === deviceID))
 
   return [oldDeviceIDs, newDeviceIDs];
 }
