@@ -15,6 +15,9 @@ const METHOD_GET = "GET";
 const METHOD_POST = "POST";
 const METHOD_PUT = "PUT";
 
+// Timeouts
+const REQUEST_TIMEOUT = 35000;
+
 module.exports = {
   // HTTP status
   STT_OK,
@@ -31,4 +34,6 @@ module.exports = {
   METHOD_DELETE,
   METHOD_GET,
   METHOD_POST,
+  // Timeouts
+  REQUEST_TIMEOUT,
 }

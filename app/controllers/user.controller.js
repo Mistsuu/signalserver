@@ -1,6 +1,10 @@
 const { UserModel } = require("models");
 const { getRandomInt } = require("utils/buffer.util");
 
+// =================================================================================
+//                                    KEY OPERATIONS
+// =================================================================================
+
 const registerKeys = async (userID, deviceID, preKeyBundle) => {
   try 
   {
@@ -65,6 +69,48 @@ const checkIfKeyExists = async (userID, deviceID) => {
   }
 } 
 
+const checkIfDeviceExists = checkIfKeyExists;
+
+const fetchPrekeyBundle = async (userID, deviceID) => {
+  const record = await UserModel.findOne({
+    userID: userID,
+    deviceID: deviceID,
+  });
+
+  if (record === null)
+    return {
+      found: false
+    };
+
+
+  // Fetch random one-time key and move it to the usedOneTimeKeys.
+  var randIndex = record.oneTimePrekeys.length !== 0 ? getRandomInt(record.oneTimePrekeys.length) : null;
+  var oneTimePrekey = randIndex !== null ? record.oneTimePrekeys[randIndex] : null; 
+  if (oneTimePrekey !== null) {
+    record.oneTimePrekeys.splice(randIndex, 1);
+    await UserModel.updateOne( { _id: record.id }, { 
+      $set: { oneTimePrekeys: record.oneTimePrekeys },
+    });
+    await UserModel.updateOne( { _id: record.id }, { 
+      $push: { usedOneTimeKeys: oneTimePrekey }
+    });
+  }
+
+  // Return keys
+  return {
+    found: true,
+    identityKey: record.identityKey,
+    signedPrekey: record.signedPrekey,
+    signature: record.signature,
+    oneTimePrekey: oneTimePrekey,
+  }
+}
+
+
+// =================================================================================
+//                                    PUT MESSAGES
+// =================================================================================
+
 const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, messageObjs) => {
   var oldDeviceIDs = [];
   var newDeviceIDs = [];
@@ -107,41 +153,18 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
   return [oldDeviceIDs, newDeviceIDs];
 }
 
-const checkIfDeviceExists = checkIfKeyExists;
-
-const fetchPrekeyBundle = async (userID, deviceID) => {
-  const record = await UserModel.findOne({
-    userID: userID,
-    deviceID: deviceID,
-  });
-
-  if (record === null)
-    return {
-      found: false
-    };
 
 
-  // Fetch random one-time key and move it to the usedOneTimeKeys.
-  var randIndex = record.oneTimePrekeys.length !== 0 ? getRandomInt(record.oneTimePrekeys.length) : null;
-  var oneTimePrekey = randIndex !== null ? record.oneTimePrekeys[randIndex] : null; 
-  if (oneTimePrekey !== null) {
-    record.oneTimePrekeys.splice(randIndex, 1);
-    await UserModel.updateOne( { _id: record.id }, { 
-      $set: { oneTimePrekeys: record.oneTimePrekeys },
-    });
-    await UserModel.updateOne( { _id: record.id }, { 
-      $push: { usedOneTimeKeys: oneTimePrekey }
-    });
-  }
+// =================================================================================
+//                                    FETCH MESSAGES
+// =================================================================================
 
-  // Return keys
-  return {
-    found: true,
-    identityKey: record.identityKey,
-    signedPrekey: record.signedPrekey,
-    signature: record.signature,
-    oneTimePrekey: oneTimePrekey,
-  }
+const fetchMessagesFromMailbox = async (userID, deviceID) => {
+
+}
+
+const clearPendingMessages = async (userID, deviceID) => {
+
 }
 
 module.exports = {
@@ -150,4 +173,6 @@ module.exports = {
   checkIfKeyExists,
   checkIfDeviceExists,
   putMessagesToMailbox,
+  fetchMessagesFromMailbox,
+  clearPendingMessages,
 }

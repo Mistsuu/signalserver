@@ -44,12 +44,17 @@ const registerLinks = () => {
   app.get("/test", Router.TestRoute);
   app.post("/test", Router.TestRoute);
   app.post("/test-auth", Middleware.AuthMiddleware, Router.TestRoute);
+  
   app.post("/login", Router.LoginRoute);
   app.post("/register", Router.RegisterRoute);
+  
   app.post("/initkey", Middleware.AuthMiddleware, Router.InitKeyRoute);
   app.get("/checkKeyStatus", Middleware.AuthMiddleware, Router.CheckKeyStatusRoute);
   app.get("/getkey/:userID/:deviceID", Middleware.AuthMiddleware, Router.GetKeyRoute);
-  app.post("/send/:userID", Middleware.AuthMiddleware, Router.SendRoute);
+  
+  app.put("/sendMessages/:userID", Middleware.AuthMiddleware, Router.SendMessagesRoute);
+  app.get("/fetchMessages", Middleware.AuthMiddleware, Router.FetchMessagesRoute);
+  app.delete("/clearMessages", Middleware.AuthMiddleware, Router.ClearMessagesRoute);
 }
 
 const start = () => {
