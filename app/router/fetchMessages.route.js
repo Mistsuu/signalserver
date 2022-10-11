@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
       timestamp: number().required(),
       sendUserID: string().required(),
       sendDeviceID: string().required(),
+      receiveUserID: string().required(),
     })).default([])
   });
 

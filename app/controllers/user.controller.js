@@ -111,7 +111,7 @@ const fetchPrekeyBundle = async (userID, deviceID) => {
 //                                    PUT MESSAGES
 // =================================================================================
 
-const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, messageObjs) => {
+const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, targetUserID, messageObjs) => {
   var oldDeviceIDs = [];
   var newDeviceIDs = [];
 
@@ -133,6 +133,7 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
             timestamp: messageObj.timestamp,
             sendUserID: sendUserID,
             sendDeviceID: sendDeviceID,
+            receiveUserID: targetUserID,
           }
         }
       });

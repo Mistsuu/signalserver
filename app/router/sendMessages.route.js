@@ -28,20 +28,28 @@ module.exports = (req, res) => {
     });
     
     // Get user's data
-    if (!req.params.hasOwnProperty("userID")) {
+    if (!req.params.hasOwnProperty("userID") || !req.params.hasOwnProperty("targetUserID")) {
       res.status(ApiConstant.STT_BAD_REQUEST)
         .json(responseSchema.cast({
           error: TxtConstant.TXT_NO_USER_ID_FOUND_FOR_RECEIPIENT
         }))
-    } else {
+    } 
+    else if (req.params.hasOwnProperty("userID") !== req.params.hasOwnProperty("targetUserID") || req.params.hasOwnProperty("userID") !== req.authData.userID) {
+      res.status(ApiConstant.STT_BAD_REQUEST)
+        .json(responseSchema.cast({
+          error: TxtConstant.TXT_THIS_PATH_ONLY_SEND_TO_YOU_OR_THE_RECEIPIENT
+        }))
+    }
+    else {
       const sendUserID = req.authData.userID;
       const sendDeviceID = req.authData.deviceID;
       const receipientUserID = req.params.userID;
+      const targetUserID = req.params.targetUserID;
       // console.log(`${sendUserID}.${sendDeviceID} --> ${receipientUserID}`)
   
       requestSchema.validate(req.body)
         .then(messages => {
-          UserController.putMessagesToMailbox(sendUserID, sendDeviceID, receipientUserID, messages)
+          UserController.putMessagesToMailbox(sendUserID, sendDeviceID, receipientUserID, targetUserID, messages)
             .then(([oldDeviceIDs, newDeviceIDs]) => {
               if (oldDeviceIDs.length || newDeviceIDs.length) {
                 res.status(ApiConstant.STT_CONFLICT).json(

@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
       timestamp: Number,
       sendUserID: String,
       sendDeviceID: String,
+      receiveUserID: String,
     })
   ],
   pendingMessages: [
@@ -30,6 +31,7 @@ const userSchema = new mongoose.Schema({
       timestamp: Number,
       sendUserID: String,
       sendDeviceID: String,
+      receiveUserID: String,
     })
   ]
 });

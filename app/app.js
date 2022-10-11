@@ -52,7 +52,7 @@ const registerLinks = () => {
   app.get("/checkKeyStatus", Middleware.AuthMiddleware, Router.CheckKeyStatusRoute);
   app.get("/getkey/:userID/:deviceID", Middleware.AuthMiddleware, Router.GetKeyRoute);
   
-  app.put("/sendMessages/:userID", Middleware.AuthMiddleware, Router.SendMessagesRoute);
+  app.put("/sendMessages/:targetUserID/:userID", Middleware.AuthMiddleware, Router.SendMessagesRoute);
   app.get("/fetchMessages", Middleware.AuthMiddleware, Router.FetchMessagesRoute);
   app.delete("/clearMessages", Middleware.AuthMiddleware, Router.ClearMessagesRoute);
 }
