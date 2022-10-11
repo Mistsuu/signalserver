@@ -74,7 +74,7 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
     if (!await checkIfDeviceExists(receipientUserID, messageObj.receipientDeviceID)) {
       oldDeviceIDs.append(deviceID);
     } else {
-      UserModel.findOneAndUpdate({
+      await UserModel.findOneAndUpdate({
         userID: receipientUserID,
         deviceID: messageObj.receipientDeviceID,
       }, {
@@ -89,7 +89,7 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
             sendDeviceID: sendDeviceID,
           }
         }
-      })
+      });
     }
   }
 

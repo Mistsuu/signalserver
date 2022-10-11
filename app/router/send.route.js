@@ -58,11 +58,7 @@ module.exports = (req, res) => {
               }
             })
             .catch(err => {
-              res.status(ApiConstant.STT_BAD_REQUEST).json(
-                responseSchema.cast({
-                  error: err.errors[0],
-                })
-              );
+              res.status(ApiConstant.STT_INTERNAL_SERVER).end();
             });
         })
         .catch(err => {
