@@ -195,6 +195,22 @@ const clearPendingMessages = async (userID, deviceID) => {
   }
 }
 
+// =================================================================================
+//                                    FETCH USERS
+// =================================================================================
+
+const fetchUsersExcept = async (userIDException) => {
+  var userIDs = (await UserModel
+                  .find({
+                      userID: { $ne: userIDException }
+                    })
+                ).map(record => record.userID);
+
+  // Remove duplicates...
+  userIDs = [...new Set(userIDs)];
+  return userIDs;
+}
+
 module.exports = {
   registerKeys,
   fetchPrekeyBundle,
@@ -204,4 +220,6 @@ module.exports = {
   putMessagesToMailbox,
   fetchMessagesFromMailbox,
   clearPendingMessages,
+
+  fetchUsersExcept,
 }

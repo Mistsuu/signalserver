@@ -55,6 +55,8 @@ const registerLinks = () => {
   app.put("/sendMessages/:targetUserID/:userID", Middleware.AuthMiddleware, Router.SendMessagesRoute);
   app.get("/fetchMessages", Middleware.AuthMiddleware, Router.FetchMessagesRoute);
   app.delete("/clearMessages", Middleware.AuthMiddleware, Router.ClearMessagesRoute);
+
+  app.get("/fetchUsers", Middleware.AuthMiddleware, Router.FetchUsersRoute);
 }
 
 const start = () => {

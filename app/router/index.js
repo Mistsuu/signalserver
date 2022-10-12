@@ -11,6 +11,8 @@ const InitKeyRoute = require("./initkey.route");
 const CheckKeyStatusRoute = require("./checkkeystatus.route");
 const GetKeyRoute = require("./getkey.route");
 
+const FetchUsersRoute = require("./fetchUsers.route");
+
 module.exports = {
   TestRoute,
   
@@ -24,4 +26,6 @@ module.exports = {
   InitKeyRoute,
   GetKeyRoute,
   CheckKeyStatusRoute,
+
+  FetchUsersRoute,
 }

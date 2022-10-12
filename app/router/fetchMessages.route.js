@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
       break;
     }
 
-    // Wait for 1s.
-    await new Promise(r => setTimeout(r, 1000));
+    // Wait for 0.1s.
+    await new Promise(r => setTimeout(r, 100));
   }
 }
