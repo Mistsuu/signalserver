@@ -66,6 +66,7 @@ module.exports = (req, res) => {
               }
             })
             .catch(err => {
+              console.log(err)
               res.status(ApiConstant.STT_INTERNAL_SERVER).end();
             });
         })

@@ -118,7 +118,7 @@ const putMessagesToMailbox = async (sendUserID, sendDeviceID, receipientUserID, 
   // Send to already corrected receipients.
   for (var messageObj of messageObjs) {
     if (!await checkIfDeviceExists(receipientUserID, messageObj.receipientDeviceID)) {
-      oldDeviceIDs.append(deviceID);
+      oldDeviceIDs.push(messageObj.receipientDeviceID);
     } else {
       await UserModel.findOneAndUpdate({
         userID: receipientUserID,
