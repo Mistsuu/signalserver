@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { AuthModel } = require("models");
+const { AuthModel, UserModel } = require("models");
 
 const login = async (userID, password) => {
   try 
@@ -50,7 +50,7 @@ const isUserExists = async (userID) => {
 }
 
 const logout = async (userID, deviceID) => {
-  return await AuthModel.findOneAndRemove({
+  return await UserModel.findOneAndRemove({
     userID: userID,
     deviceID: deviceID,
   }) !== null;
