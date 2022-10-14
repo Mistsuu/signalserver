@@ -1,6 +1,7 @@
 const TestRoute = require("./test.route");
 
 const LoginRoute = require("./login.route");
+const LogoutRoute = require("./logout.route");
 const RegisterRoute = require("./register.route");
 
 const SendMessagesRoute = require("./sendMessages.route");
@@ -17,6 +18,7 @@ module.exports = {
   TestRoute,
   
   LoginRoute,
+  LogoutRoute,
   RegisterRoute,
 
   SendMessagesRoute,

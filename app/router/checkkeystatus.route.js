@@ -4,7 +4,7 @@ const { ApiConstant, ConfigConstant } = require("consts");
 
 module.exports = (req, res) => {
   let responseSchema = object({
-    keyStatus: number().oneOf(ConfigConstant.KEY_STATE),
+    keyStatus: number().oneOf(Object.values(ConfigConstant.KEY_STATE)),
   })
 
   UserController.checkKeyStatus(req.authData.userID, req.authData.deviceID)

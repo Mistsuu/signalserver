@@ -49,8 +49,16 @@ const isUserExists = async (userID) => {
   }) !== null;
 }
 
+const logout = async (userID, deviceID) => {
+  return await AuthModel.findOneAndRemove({
+    userID: userID,
+    deviceID: deviceID,
+  }) !== null;
+}
+
 module.exports = {
   login, 
+  logout,
   register,
   isUserExists,
 }
