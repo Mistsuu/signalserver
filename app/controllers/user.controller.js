@@ -94,7 +94,7 @@ const fetchPrekeyBundle = async (userID, deviceID) => {
 
   // Fetch random one-time key and remove it.
   var randIndex = record.oneTimePrekeys.length !== 0 ? getRandomInt(record.oneTimePrekeys.length) : null;
-  var oneTimePrekey = randIndex !== null ? record.oneTimePrekeys[randIndex] : null; 
+  var oneTimePrekey = randIndex !== null ? record.oneTimePrekeys[randIndex] : ""; 
   if (oneTimePrekey !== null) {
     record.oneTimePrekeys.splice(randIndex, 1);
     await UserModel.updateOne( { _id: record.id }, { 
