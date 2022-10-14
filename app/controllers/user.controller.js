@@ -65,7 +65,20 @@ const checkIfKeyExists = async (userID, deviceID) => {
   }
 } 
 
-const checkIfDeviceExists = checkIfKeyExists;
+const checkIfDeviceExists = async (userID, deviceID) => {
+  try 
+  {
+    const record = await UserModel.findOne({
+      userID: userID,
+      deviceID: deviceID,
+    });
+    return record !== null;
+  } 
+  catch 
+  {
+    return false;
+  }
+} 
 
 const fetchPrekeyBundle = async (userID, deviceID) => {
   const record = await UserModel.findOne({
