@@ -1,18 +1,21 @@
-const { object, boolean } = require("yup");
+const { object, number } = require("yup");
 const { UserController } = require("controllers");
-const { ApiConstant } = require("consts");
+const { ApiConstant, ConfigConstant } = require("consts");
 
 module.exports = (req, res) => {
   let responseSchema = object({
-    isKeyExists: boolean().required(),
+    keyStatus: number().oneOf(ConfigConstant.KEY_STATE),
   })
 
-  UserController.checkIfKeyExists(req.authData.userID, req.authData.deviceID)
-    .then(isKeyExists => {
+  UserController.checkKeyStatus(req.authData.userID, req.authData.deviceID)
+    .then(keyStatus => {
       res.status(ApiConstant.STT_OK).json(
         responseSchema.cast({
-          isKeyExists: isKeyExists,
+          keyStatus: keyStatus,
         })
       );
+    })
+    .catch(err => {
+      res.status(ApiConstant.STT_INTERNAL_SERVER).end();
     })
 }

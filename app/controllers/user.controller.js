@@ -1,5 +1,6 @@
 const { UserModel } = require("models");
 const { getRandomInt } = require("utils/buffer.util");
+const { ConfigConstant } = require("consts");
 
 // =================================================================================
 //                                    KEY OPERATIONS
@@ -50,19 +51,18 @@ const registerKeys = async (userID, deviceID, preKeyBundle) => {
   }
 }
 
-const checkIfKeyExists = async (userID, deviceID) => {
-  try 
-  {
-    const record = await UserModel.findOne({
-      userID: userID,
-      deviceID: deviceID,
-    });
-    return record !== null;
-  } 
-  catch 
-  {
-    return false;
-  }
+const checkKeyStatus = async (userID, deviceID) => {
+  const record = await UserModel.findOne({
+    userID: userID,
+    deviceID: deviceID,
+  });
+  
+  if (record === null)
+    return ConfigConstant.KEY_STATE.notUploaded;
+  else if (record.oneTimePrekeys.length < ConfigConstant.LOW_NO_ONE_TIME_PREKEYS)
+    return ConfigConstant.KEY_STATE.lowOneTime;
+  else
+    return ConfigConstant.KEY_STATE.ok;
 } 
 
 const checkIfDeviceExists = async (userID, deviceID) => {
@@ -220,7 +220,7 @@ const fetchUsersExcept = async (userIDException) => {
 module.exports = {
   registerKeys,
   fetchPrekeyBundle,
-  checkIfKeyExists,
+  checkKeyStatus,
   checkIfDeviceExists,
   
   putMessagesToMailbox,
