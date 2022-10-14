@@ -31,19 +31,15 @@ const registerKeys = async (userID, deviceID, preKeyBundle) => {
     else if (record.signature !== preKeyBundle.signature)
       return false;
     else {
-      // Get a list of already published one time keys
-      var alreadyPublishedOneTimes = [];
-      alreadyPublishedOneTimes = alreadyPublishedOneTimes.concat(record.oneTimePrekeys).concat(record.usedOneTimeKeys);
-
       // Update if found new ones
-      var newOneTimes = preKeyBundle.onetimePrekeys.filter(oneTimePrekey => !alreadyPublishedOneTimes.includes(oneTimePrekey));
+      var newOneTimePrekeys = preKeyBundle.onetimePrekeys.filter(oneTimePrekey => !record.oneTimePrekeys.includes(oneTimePrekey));
       await UserModel.findOneAndUpdate({
         userID: userID,
         deviceID: deviceID,
         identityKey: preKeyBundle.identityKey,
         signedPrekey: preKeyBundle.signedPrekey,
         signature: preKeyBundle.signature,
-      }, { $push: { oneTimePrekeys: { $each: newOneTimes } } })
+      }, { $push: { oneTimePrekeys: { $each: newOneTimePrekeys } } })
     }
 
     return true;
@@ -83,16 +79,13 @@ const fetchPrekeyBundle = async (userID, deviceID) => {
     };
 
 
-  // Fetch random one-time key and move it to the usedOneTimeKeys.
+  // Fetch random one-time key and remove it.
   var randIndex = record.oneTimePrekeys.length !== 0 ? getRandomInt(record.oneTimePrekeys.length) : null;
   var oneTimePrekey = randIndex !== null ? record.oneTimePrekeys[randIndex] : null; 
   if (oneTimePrekey !== null) {
     record.oneTimePrekeys.splice(randIndex, 1);
     await UserModel.updateOne( { _id: record.id }, { 
       $set: { oneTimePrekeys: record.oneTimePrekeys },
-    });
-    await UserModel.updateOne( { _id: record.id }, { 
-      $push: { usedOneTimeKeys: oneTimePrekey }
     });
   }
 
